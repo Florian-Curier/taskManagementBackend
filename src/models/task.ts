@@ -15,7 +15,6 @@ const taskSchema = new mongoose.Schema({
     UserId: { type: String, required: true},
     description: { type: String},
     completed: { type: Boolean, default: false },
-    category: { type: String, required: true },
     priority: {type: String, enum: ['haute', 'moyenne', 'basse'], required: true},
     dueDate: { type: Date, required: false}
 })
