@@ -30,7 +30,7 @@ const taskSchema = new mongoose.Schema({
     UserId: { type: String, required: true },
     description: { type: String },
     completed: { type: Boolean, default: false },
-    priority: { type: String, enum: ['haute', 'moyenne', 'basse'], required: true },
+    priority: { type: String, enum: ['high', 'medium', 'low'], required: true },
     dueDate: { type: Date, required: false },
     subTasks: [subTaskSchema] // Ajout du tableau de sous-tâches
 });
