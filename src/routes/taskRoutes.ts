@@ -111,4 +111,42 @@ router.patch('/:id/toggle', async (req: Request, res: Response) => {
     }
 });
 
+//Route pour ajouter une sous-tache 
+router.post("/:id/subtask", async (req: Request, res: Response) => {
+    try {
+        const { id } = req.params;
+        const { title } = req.body;
+
+        const task = await Task.findById(id);
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        task.subTasks.push({ title, completed: false });
+        await task.save();
+        res.status(201).json(task); // Retourner la tâche avec la sous-tâche ajoutée
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error adding subtask', error });
+    }
+});
+
+router.patch('/:taskId/subtasks/:subTaskIndex/toggle', async (req, res) => {
+    const { taskId, subTaskIndex } = req.params;
+
+    try {
+        const task = await Task.findById(taskId);
+        if (!task) {
+            return res.status(404).json({ message: 'Task not found' });
+        }
+
+        task.subTasks[Number(subTaskIndex)].completed = !task.subTasks[Number(subTaskIndex)].completed;
+        await task.save();
+        res.json(task);
+    } catch (error) {
+        res.status(500).json({ message: 'Error toggling sub-task', error });
+    }
+});
+
+
 export default router;
