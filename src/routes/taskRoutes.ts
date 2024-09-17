@@ -117,6 +117,8 @@ router.post("/:id/subtask", async (req: Request, res: Response) => {
         const { id } = req.params;
         const { title } = req.body;
 
+        console.log(`Task ID: ${id}, Subtask title: ${title}`);
+
         const task = await Task.findById(id);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
@@ -127,6 +129,8 @@ router.post("/:id/subtask", async (req: Request, res: Response) => {
         res.status(201).json(task); // Retourner la tâche avec la sous-tâche ajoutée
     } catch (error) {
         console.error(error);
+
+        console.error('Error adding subtask:', error);
         res.status(500).json({ message: 'Error adding subtask', error });
     }
 });

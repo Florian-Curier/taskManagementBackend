@@ -13,7 +13,7 @@ export interface ITask extends Document {
     UserId: string;
     description: string;
     completed: boolean;
-    priority: 'haute' | 'moyenne' | 'basse';
+    priority: 'high' | 'medium' | 'low';
     dueDate: string;
     subTasks: ISubTask[]; // Ajout du tableau de sous-tâches
 }
