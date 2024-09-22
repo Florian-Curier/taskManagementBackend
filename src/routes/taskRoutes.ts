@@ -117,19 +117,18 @@ router.post("/:id/subtask", async (req: Request, res: Response) => {
         const { id } = req.params;
         const { title } = req.body;
 
-        console.log(`Task ID: ${id}, Subtask title: ${title}`);
+        console.log(`Sub-task title received: ${title}`);  
 
         const task = await Task.findById(id);
         if (!task) {
             return res.status(404).json({ message: 'Task not found' });
         }
 
+        // Ajoute la sous-tâche
         task.subTasks.push({ title, completed: false });
         await task.save();
-        res.status(201).json(task); // Retourner la tâche avec la sous-tâche ajoutée
+        res.status(201).json(task);  // Retourne la tâche mise à jour
     } catch (error) {
-        console.error(error);
-
         console.error('Error adding subtask:', error);
         res.status(500).json({ message: 'Error adding subtask', error });
     }
@@ -137,6 +136,8 @@ router.post("/:id/subtask", async (req: Request, res: Response) => {
 
 router.patch('/:taskId/subtasks/:subTaskIndex/toggle', async (req, res) => {
     const { taskId, subTaskIndex } = req.params;
+    
+    console.log(`Received Task ID: ${taskId}, SubTaskIndex: ${subTaskIndex}`);
 
     try {
         const task = await Task.findById(taskId);
@@ -144,13 +145,20 @@ router.patch('/:taskId/subtasks/:subTaskIndex/toggle', async (req, res) => {
             return res.status(404).json({ message: 'Task not found' });
         }
 
-        task.subTasks[Number(subTaskIndex)].completed = !task.subTasks[Number(subTaskIndex)].completed;
+        const index = Number(subTaskIndex);
+        if (!task.subTasks || task.subTasks.length <= index || index < 0) {
+            return res.status(400).json({ message: 'Invalid sub-task index' });
+        }
+
+        // Basculer l'état de complétion de la sous-tâche
+        task.subTasks[index].completed = !task.subTasks[index].completed;
         await task.save();
+
         res.json(task);
     } catch (error) {
+        console.error('Error toggling sub-task:', error);
         res.status(500).json({ message: 'Error toggling sub-task', error });
     }
 });
-
 
 export default router;
