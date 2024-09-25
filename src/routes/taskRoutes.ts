@@ -134,6 +134,7 @@ router.post("/:id/subtask", async (req: Request, res: Response) => {
     }
 });
 
+//Route pour basculer l'état de complétion de la sous-tâche
 router.patch('/:taskId/subtasks/:subTaskIndex/toggle', async (req, res) => {
     const { taskId, subTaskIndex } = req.params;
     
