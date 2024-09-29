@@ -7,7 +7,7 @@ export interface AuthRequest extends Request {
 }
 
 export const auth = (req: AuthRequest, res: Response, next: NextFunction) => {
-  const token = req.header('x-auth-token');
+  const token = req.header('x-auth-token');;
 
   // Vérifiez si un token est présent
   if (!token) {
