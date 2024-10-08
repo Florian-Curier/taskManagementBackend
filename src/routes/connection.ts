@@ -7,42 +7,6 @@ import { auth, AuthRequest } from '../middlewares/auth'
 
 const router = express.Router();
 
-// Route d'inscription
-router.post('/signup', [
-  check('name', 'Name required').not().isEmpty(),
-  check('email', 'Please enter a valid email').isEmail(),
-  check('password', 'Password must contain at least 6 characters').isLength({ min: 6 })
-], async (req: Request, res: Response, next: NextFunction) => {  // Ajoutez les types pour req, res, next
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) {
-    return res.status(400).json({ errors: errors.array() });
-  }
-
-  const { name, email, password } = req.body;
-
-  try {
-    // Vérifiez si l'utilisateur existe déjà
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ message: 'User already registered' });
-    }
-
-    // Créez un nouvel utilisateur
-    user = new User({ name, email, password });
-
-    // Hachez le mot de passe avant de le sauvegarder
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-
-    // Sauvegardez l'utilisateur
-    await user.save();
-    res.status(201).json({ message: 'User created successfully' });
-
-  } catch (error) {
-    console.error((error as any).message);
-    res.status(500).send('Erreur serveur');
-  }
-});
 
 // Route de connexion
 router.post('/signin', [
