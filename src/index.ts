@@ -8,7 +8,7 @@ import connection from './routes/connection'
 dotenv.config()
 
 const app = express()
-const PORT = process.env.PORT || 5001
+const PORT = process.env.PORT || 5002
 
 //Middleware
 app.use(cors())
@@ -24,7 +24,7 @@ mongoose.connect(process.env.MONGO_URI || 'mongodb://localhost:27017/taskmanager
     console.log('Connected to MongoDB')
 }).catch((error) => console.log('MongoDB connection error:', error))
 
-//Sample route 
+//Sample rout
 app.get ('/', (req, res) => {
     res.send('API is running')
 })
